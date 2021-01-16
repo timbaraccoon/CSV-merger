@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface ReportsCreator {
 
+    void setPathToReport(String path);
     void createReport1(List<Mark> availableMarks);
 
     void createReport2();

@@ -44,6 +44,10 @@ public class CsvMergerController {
 
 //        READY PART
 //        while (true) {
+//              System.out.println("\n****" +
+//                              "\nEnter path to target zip source. " +
+//                              "\nTo escape - enter \"exit\"");
+
 //            String path = pathBringer.getPath();
 //            if (path.equals("exit")) {
 //                break;
@@ -57,11 +61,13 @@ public class CsvMergerController {
         String pathToZip = "D:\\1\\source_archive.zip";
         List<String> strings = zipReaderService.readStringsFrom(pathToZip);
 
+        System.out.println("\n****\nInput Data:\n");
         strings.forEach(System.out::println);
 
         List<Mark> availableMarks = markParser.createStreamOfMarksFrom(strings)
                                         .collect(Collectors.toList());
 
+        reportsCreator.setPathToReport("D:\\");
         reportsCreator.createReport1(availableMarks);
 
         shutdownContext();

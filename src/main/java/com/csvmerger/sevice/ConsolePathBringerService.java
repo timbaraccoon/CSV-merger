@@ -12,9 +12,6 @@ public class ConsolePathBringerService implements PathBringerService {
     @Override
     public String getPath() {
         String path = "";
-        System.out.println("\n*************" +
-                "\nEnter path to target zip source. " +
-                "\nTo escape - enter \"exit\"");
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {
