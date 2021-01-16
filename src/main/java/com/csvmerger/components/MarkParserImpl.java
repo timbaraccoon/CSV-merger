@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class MarkParserImpl implements MarkParser {
 
     @Override
-    public Stream<Mark> createMarksFrom(List<String> strings) {
+    public Stream<Mark> createStreamOfMarksFrom(List<String> strings) {
 
         return strings.stream().filter(x -> !x.startsWith("#"))
                 .map(str -> str.split(","))

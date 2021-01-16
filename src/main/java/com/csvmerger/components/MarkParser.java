@@ -7,5 +7,5 @@ import java.util.stream.Stream;
 
 public interface MarkParser {
 
-    Stream<Mark> createMarksFrom(List<String> strings);
+    Stream<Mark> createStreamOfMarksFrom(List<String> strings);
 }

@@ -28,7 +28,7 @@ public class ZipReaderServiceImpl implements ZipReaderService {
 
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
-            while(entries.hasMoreElements()){
+            while(entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
                 BufferedReader reader = new BufferedReader(new InputStreamReader(zipFile.getInputStream(entry)));
 
@@ -40,5 +40,4 @@ public class ZipReaderServiceImpl implements ZipReaderService {
             e.printStackTrace();
         }
     }
-
 }
