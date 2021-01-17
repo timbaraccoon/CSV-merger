@@ -37,7 +37,7 @@ public class ReportsCreatorImpl implements ReportsCreator {
 
         availableMarks.stream()
                 .filter(mark -> resultMarkNames.stream()
-                        .anyMatch(mark.getName()::equalsIgnoreCase))
+                                .anyMatch(mark.getName()::equalsIgnoreCase))
                 .forEach(mark -> report.merge(mark.getName(),
                                               mark.getQuantity(),
                                               Integer::sum));
@@ -46,7 +46,6 @@ public class ReportsCreatorImpl implements ReportsCreator {
         String json = gson.toJson(report);
         writeJsonReportToFile(ReportType.MERGE_INPUT_MARKS, json);
     }
-
 
     public void createReportListOfValues(List<Mark> availableMarks) {
         Map<String, List<Integer>> report = new TreeMap<>(
@@ -68,7 +67,6 @@ public class ReportsCreatorImpl implements ReportsCreator {
 
         String json = new Gson().toJson(report);
         writeJsonReportToFile(ReportType.MERGE_TO_LIST, json);
-
     }
 
     private void writeJsonReportToFile(ReportType reportType, String json) {
@@ -80,8 +78,7 @@ public class ReportsCreatorImpl implements ReportsCreator {
 
         try (FileWriter file = new FileWriter(pathToReport + fileName + ".json")) {
             file.write(json);
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println("Successfully saved.");
