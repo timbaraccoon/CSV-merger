@@ -3,6 +3,7 @@ package com.csvmerger.controller;
 import com.csvmerger.components.MarkParser;
 import com.csvmerger.entity.Mark;
 import com.csvmerger.sevice.PathBringerService;
+import com.csvmerger.sevice.ReportType;
 import com.csvmerger.sevice.ReportsCreator;
 import com.csvmerger.sevice.ZipReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +53,7 @@ public class CsvMergerController {
 //            if (path.equals("exit")) {
 //                break;
 //            }
+
 //
 //            System.out.println(path);
 //        }
@@ -61,18 +63,24 @@ public class CsvMergerController {
         String pathToZip = "D:\\1\\source_archive.zip";
         List<String> strings = zipReaderService.readStringsFrom(pathToZip);
 
-        System.out.println("\n****\nInput Data:\n");
+        System.out.println("\n****\nStart new session\n\nInput Data:\n");
         strings.forEach(System.out::println);
 
         List<Mark> availableMarks = markParser.createStreamOfMarksFrom(strings)
                                         .collect(Collectors.toList());
 
+        List<String> markNames = List.of("mark01", "mark11", "mark13", "markft");
+
+
+        // TODO потом считать с консоли
         reportsCreator.setPathToReport("D:\\");
-        reportsCreator.createReport1(availableMarks);
+
+        reportsCreator.createReportSummarize(availableMarks);
+        reportsCreator.createReportInputMarks(availableMarks, markNames);
+        reportsCreator.createReportListQuantity(availableMarks);
 
         shutdownContext();
 
-        // TODO сделать отчеты
         // TODO потом прибрать проект
         // TODO сделать тесты
     }

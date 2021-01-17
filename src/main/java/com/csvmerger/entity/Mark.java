@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 public class Mark {
 
-    private final String markName;
+    private final String name;
     private final int quantity;
 
 }

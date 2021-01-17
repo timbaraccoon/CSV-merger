@@ -36,7 +36,8 @@ public class ZipReaderServiceImpl implements ZipReaderService {
                     stringsFromZip.add(reader.readLine());
                 }
             }
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
     }

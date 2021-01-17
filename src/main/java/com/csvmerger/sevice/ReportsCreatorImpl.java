@@ -2,14 +2,12 @@ package com.csvmerger.sevice;
 
 import com.csvmerger.entity.Mark;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.springframework.stereotype.Component;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 @Component
 public class ReportsCreatorImpl implements ReportsCreator {
@@ -20,42 +18,81 @@ public class ReportsCreatorImpl implements ReportsCreator {
         this.pathToReport = "";
     }
 
-    public void setPathToReport(String path) {
-        this.pathToReport = path;
-    }
 
-    @Override
-    public void createReport1(List<Mark> availableMarks) {
-        Map<String, Integer> report = new TreeMap<>(String::compareToIgnoreCase);
+    public void createReportSummarize(List<Mark> availableMarks) {
+        Map<String, Integer> report = new TreeMap<>(
+                                String::compareToIgnoreCase);
 
-        for(Mark mark : availableMarks) {
-            report.merge(mark.getMarkName(), mark.getQuantity(), Integer::sum);
-        }
-
-        System.out.println("\n****");
-        System.out.println("Created JSON report1: ");
+        availableMarks.forEach(mark -> report.merge(mark.getName(),
+                                                    mark.getQuantity(),
+                                                    Integer::sum));
 
         String json = new Gson().toJson(report);
+        writeJsonReportToFile(ReportType.MERGE_SUMMARIZE, json);
+    }
 
+    public void createReportInputMarks(List<Mark> availableMarks, List<String> resultMarkNames) {
+        Map<String, Integer> report = new TreeMap<>(
+                                Comparator.nullsFirst(String::compareToIgnoreCase));
+
+        resultMarkNames.forEach(markName -> report.put(markName, null));
+
+        availableMarks.stream()
+                .filter(mark -> resultMarkNames.stream().anyMatch(mark.getName()::equalsIgnoreCase))
+                .forEach(mark -> report.merge(mark.getName(),
+                                              mark.getQuantity(),
+                                              Integer::sum));
+
+
+        Gson gson = new GsonBuilder().serializeNulls().create();
+        String json = gson.toJson(report);
+        writeJsonReportToFile(ReportType.MERGE_INPUT_MARKS, json);
+    }
+
+
+    public void createReportListQuantity(List<Mark> availableMarks) {
+        Map<String, List<Integer>> report = new TreeMap<>(
+                                        String::compareToIgnoreCase);
+
+        availableMarks.forEach(mark -> {
+            if (!report.containsKey(mark.getName())) {
+                List<Integer> valueList = new ArrayList<>();
+                valueList.add(mark.getQuantity());
+
+                report.put(mark.getName(), valueList);
+
+            } else {
+                report.get(mark.getName())
+                        .add(mark.getQuantity());
+            }
+        });
+
+        report.keySet()
+                .forEach(markName -> report.get(markName)
+                        .sort(Comparator.reverseOrder()));
+
+        String json = new Gson().toJson(report);
+        writeJsonReportToFile(ReportType.MERGE_TO_LIST, json);
+
+    }
+
+    private void writeJsonReportToFile(ReportType reportType, String json) {
+        String fileName = reportType.fileName();
+        System.out.println("\n****\nCreated JSON " + fileName
+                            + ":\n" + reportType.description());
         System.out.println(json);
-        System.out.println("\nSaving report1 to: " + pathToReport);
+        System.out.println("\nSaving " + fileName + " to: " + pathToReport);
 
-        try (FileWriter file = new FileWriter(pathToReport + "report1.json", false)) {
+        try (FileWriter file = new FileWriter(pathToReport + fileName + ".json")) {
             file.write(json);
         }
         catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("Successfully saved.\n");
+        System.out.println("Successfully saved.");
     }
 
-    @Override
-    public void createReport2() {
-
-    }
-
-    @Override
-    public void createReport3() {
-
+    public void setPathToReport(String path) {
+        this.pathToReport = path;
     }
 }

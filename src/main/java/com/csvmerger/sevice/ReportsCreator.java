@@ -7,10 +7,10 @@ import java.util.List;
 public interface ReportsCreator {
 
     void setPathToReport(String path);
-    void createReport1(List<Mark> availableMarks);
 
-    void createReport2();
+    void createReportSummarize(List<Mark> availableMarks);
 
-    void createReport3();
+    void createReportInputMarks(List<Mark> availableMarks, List<String> resultMarkNames);
 
+    void createReportListQuantity(List<Mark> availableMarks);
 }
