@@ -56,7 +56,6 @@ public class ReportsCreatorImpl implements ReportsCreator {
             if (!report.containsKey(mark.getName())) {
                 List<Integer> valueList = new ArrayList<>();
                 valueList.add(mark.getQuantity());
-
                 report.put(mark.getName(), valueList);
 
             } else {
@@ -64,9 +63,7 @@ public class ReportsCreatorImpl implements ReportsCreator {
                         .add(mark.getQuantity());
             }
         });
-
-        report.keySet()
-                .forEach(markName -> report.get(markName)
+        report.keySet().forEach(markName -> report.get(markName)
                         .sort(Comparator.reverseOrder()));
 
         String json = new Gson().toJson(report);
