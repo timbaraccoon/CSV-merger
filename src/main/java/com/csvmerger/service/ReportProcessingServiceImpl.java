@@ -1,7 +1,7 @@
-package com.csvmerger.sevice;
+package com.csvmerger.service;
 
-import com.csvmerger.sevice.components.MarkParser;
-import com.csvmerger.sevice.components.ReportsCreator;
+import com.csvmerger.service.components.MarkParser;
+import com.csvmerger.service.components.ReportsCreator;
 import com.csvmerger.entity.Mark;
 import org.springframework.stereotype.Service;
 

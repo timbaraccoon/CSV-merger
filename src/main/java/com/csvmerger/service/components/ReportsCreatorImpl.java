@@ -1,4 +1,4 @@
-package com.csvmerger.sevice.components;
+package com.csvmerger.service.components;
 
 import com.csvmerger.entity.Mark;
 import com.google.gson.Gson;

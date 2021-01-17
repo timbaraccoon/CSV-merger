@@ -1,8 +1,8 @@
 package com.csvmerger.controller;
 
-import com.csvmerger.sevice.PathBringerService;
-import com.csvmerger.sevice.ReportProcessingService;
-import com.csvmerger.sevice.ZipReaderService;
+import com.csvmerger.service.PathBringerService;
+import com.csvmerger.service.ReportProcessingService;
+import com.csvmerger.service.ZipReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationContext;
@@ -17,17 +17,17 @@ public class CsvMergerController {
 
     private final ApplicationContext context;
     private final PathBringerService pathBringer;
-    private final ZipReaderService zipReaderService;
+    private final ZipReaderService zipReader;
     private final ReportProcessingService processingService;
 
     @Autowired
     public CsvMergerController(ApplicationContext context,
                                PathBringerService pathBringer,
-                               ZipReaderService zipReaderService,
+                               ZipReaderService zipReader,
                                ReportProcessingService processingService) {
         this.context = context;
         this.pathBringer = pathBringer;
-        this.zipReaderService = zipReaderService;
+        this.zipReader = zipReader;
         this.processingService = processingService;
     }
 
@@ -48,7 +48,7 @@ public class CsvMergerController {
 
             System.out.println("\n****\nStart new session\n\nInput Data:\n");
 
-            List<String> strings = zipReaderService.readStringsFrom(pathToZip);
+            List<String> strings = zipReader.readStringsFrom(pathToZip);
             strings.forEach(System.out::println);
 
             processingService.runReportProcessing(strings, pathToReport);
@@ -60,7 +60,7 @@ public class CsvMergerController {
     }
 
     private String getPathWithMessage(String message) {
-        System.out.println();
+        System.out.println(message);
         return pathBringer.getPath();
     }
 

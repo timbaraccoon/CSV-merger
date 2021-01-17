@@ -1,4 +1,4 @@
-package com.csvmerger.sevice;
+package com.csvmerger.service;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;

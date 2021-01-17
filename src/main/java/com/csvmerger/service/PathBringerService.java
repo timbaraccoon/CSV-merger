@@ -1,4 +1,4 @@
-package com.csvmerger.sevice;
+package com.csvmerger.service;
 
 public interface PathBringerService {
 
