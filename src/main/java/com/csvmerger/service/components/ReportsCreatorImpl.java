@@ -18,7 +18,6 @@ public class ReportsCreatorImpl implements ReportsCreator {
         this.pathToReport = "";
     }
 
-
     public void createReportSummarize(List<Mark> availableMarks) {
         Map<String, Integer> report = new TreeMap<>(
                                 String::compareToIgnoreCase);
@@ -26,7 +25,6 @@ public class ReportsCreatorImpl implements ReportsCreator {
         availableMarks.forEach(mark -> report.merge(mark.getName(),
                                                     mark.getQuantity(),
                                                     Integer::sum));
-
         String json = new Gson().toJson(report);
         writeJsonReportToFile(ReportType.MERGE_SUMMARIZE, json);
     }
@@ -38,11 +36,11 @@ public class ReportsCreatorImpl implements ReportsCreator {
         resultMarkNames.forEach(markName -> report.put(markName, null));
 
         availableMarks.stream()
-                .filter(mark -> resultMarkNames.stream().anyMatch(mark.getName()::equalsIgnoreCase))
+                .filter(mark -> resultMarkNames.stream()
+                        .anyMatch(mark.getName()::equalsIgnoreCase))
                 .forEach(mark -> report.merge(mark.getName(),
                                               mark.getQuantity(),
                                               Integer::sum));
-
 
         Gson gson = new GsonBuilder().serializeNulls().create();
         String json = gson.toJson(report);

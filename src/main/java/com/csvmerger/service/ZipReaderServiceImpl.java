@@ -26,7 +26,6 @@ public class ZipReaderServiceImpl implements ZipReaderService {
 
     private void addStringsToListFrom(String pathToZip) {
         try (ZipFile zipFile = new ZipFile(pathToZip)) {
-
             Enumeration<? extends ZipEntry> entries = zipFile.entries();
 
             while(entries.hasMoreElements()) {
