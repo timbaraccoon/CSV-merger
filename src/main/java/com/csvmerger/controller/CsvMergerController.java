@@ -34,28 +34,24 @@ public class CsvMergerController {
 
     @EventListener(ApplicationReadyEvent.class)
     public void runMergeCSV() {
-
         while (true) {
-            String pathToZip = getPathWithMessage("Enter path to target folder " +
-                                                  "for reports in format like " +
-                                                  "\"D:\\target_folder\\\"");
+            String pathToZip = getPathWithMessage("\n****\nEnter path to zip source " +
+                                                  "in format \"D:\\folder\\target.zip\"" +
+                                                  "\nTo escape - enter \"exit\"");
             if (pathToZip.equals("exit")) {
                 break;
             }
-            String pathToReport = getPathWithMessage("\n****\nEnter path to zip source " +
-                                                     "in format \"D:\\folder\\target.zip\"" +
-                                                     "\nTo escape - enter \"exit\"");
-
+            String pathToReport = getPathWithMessage("Enter path to target folder " +
+                                                     "for reports in format like " +
+                                                     "\"D:\\target_folder\\\"");
             System.out.println("\n****\nStart new session\n\nInput Data:\n");
 
             List<String> strings = zipReader.readStringsFrom(pathToZip);
             strings.forEach(System.out::println);
-
             processingService.runReportProcessing(strings, pathToReport);
 
             System.out.println("\nSession close.\n****\n");
         }
-
         shutdownContext();
     }
 
