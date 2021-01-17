@@ -50,7 +50,7 @@ public class ReportsCreatorImpl implements ReportsCreator {
     }
 
 
-    public void createReportListQuantity(List<Mark> availableMarks) {
+    public void createReportListOfValues(List<Mark> availableMarks) {
         Map<String, List<Integer>> report = new TreeMap<>(
                                         String::compareToIgnoreCase);
 

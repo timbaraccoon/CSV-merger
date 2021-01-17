@@ -12,5 +12,5 @@ public interface ReportsCreator {
 
     void createReportInputMarks(List<Mark> availableMarks, List<String> resultMarkNames);
 
-    void createReportListQuantity(List<Mark> availableMarks);
+    void createReportListOfValues(List<Mark> availableMarks);
 }

@@ -25,12 +25,13 @@ public class ReportProcessingServiceImpl implements ReportProcessingService {
         List<Mark> availableMarks = markParser.createStreamOfMarksFrom(strings)
                 .collect(Collectors.toList());
 
-        List<String> markNames = List.of("mark01", "mark11", "mark13", "markft");
+        List<String> markNames = List.of("mark01", "mark17", "mark23", "mark35",
+                                        "markFV", "markFX", "markFT");
 
         reportsCreator.setPathToReport(pathToReport);
 
         reportsCreator.createReportSummarize(availableMarks);
         reportsCreator.createReportInputMarks(availableMarks, markNames);
-        reportsCreator.createReportListQuantity(availableMarks);
+        reportsCreator.createReportListOfValues(availableMarks);
     }
 }

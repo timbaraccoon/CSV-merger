@@ -1,5 +1,6 @@
 package com.csvmerger.sevice;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -30,10 +31,14 @@ public class ZipReaderServiceImpl implements ZipReaderService {
 
             while(entries.hasMoreElements()) {
                 ZipEntry entry = entries.nextElement();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(zipFile.getInputStream(entry)));
+                String extension = FilenameUtils.getExtension(entry.getName());
 
-                while (reader.ready()) {
-                    stringsFromZip.add(reader.readLine());
+                if (extension.equalsIgnoreCase("csv")) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(zipFile.getInputStream(entry)));
+
+                    while (reader.ready()) {
+                        stringsFromZip.add(reader.readLine());
+                    }
                 }
             }
         }

@@ -36,33 +36,32 @@ public class CsvMergerController {
     public void runMergeCSV() {
 
         while (true) {
-            System.out.println("\n****" +
-                              "\nEnter path to zip source in format like \"D:\\folder\\target.zip\"" +
-                              "\nTo escape - enter \"exit\"");
-
-            String pathToZip = pathBringer.getPath();
-//            String pathToZip = "D:\\1\\source_archive.zip";
+            String pathToZip = getPathWithMessage("Enter path to target folder " +
+                                                  "for reports in format like " +
+                                                  "\"D:\\target_folder\\\"");
             if (pathToZip.equals("exit")) {
                 break;
             }
-
-            System.out.println("Enter path to target folder " +
-                    "for reports in format like \"D:\\target_folder\\\"");
-
-            String pathToReport = pathBringer.getPath();
-//            String pathToReport = "D:\\";
+            String pathToReport = getPathWithMessage("\n****\nEnter path to zip source " +
+                                                     "in format \"D:\\folder\\target.zip\"" +
+                                                     "\nTo escape - enter \"exit\"");
 
             System.out.println("\n****\nStart new session\n\nInput Data:\n");
+
             List<String> strings = zipReaderService.readStringsFrom(pathToZip);
             strings.forEach(System.out::println);
 
             processingService.runReportProcessing(strings, pathToReport);
-            System.out.println("\nSession close.\n****");
+
+            System.out.println("\nSession close.\n****\n");
         }
 
         shutdownContext();
+    }
 
-        // TODO сделать тесты
+    private String getPathWithMessage(String message) {
+        System.out.println();
+        return pathBringer.getPath();
     }
 
     private void shutdownContext() {
