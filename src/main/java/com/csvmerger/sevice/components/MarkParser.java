@@ -1,4 +1,4 @@
-package com.csvmerger.components;
+package com.csvmerger.sevice.components;
 
 import com.csvmerger.entity.Mark;
 

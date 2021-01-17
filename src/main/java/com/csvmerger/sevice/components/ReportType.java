@@ -1,4 +1,4 @@
-package com.csvmerger.sevice;
+package com.csvmerger.sevice.components;
 
 public enum ReportType {
     MERGE_SUMMARIZE("report1",

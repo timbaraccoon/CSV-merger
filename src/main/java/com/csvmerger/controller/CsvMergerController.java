@@ -1,10 +1,7 @@
 package com.csvmerger.controller;
 
-import com.csvmerger.components.MarkParser;
-import com.csvmerger.entity.Mark;
 import com.csvmerger.sevice.PathBringerService;
-import com.csvmerger.sevice.ReportType;
-import com.csvmerger.sevice.ReportsCreator;
+import com.csvmerger.sevice.ReportProcessingService;
 import com.csvmerger.sevice.ZipReaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -14,7 +11,6 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 public class CsvMergerController {
@@ -22,69 +18,52 @@ public class CsvMergerController {
     private final ApplicationContext context;
     private final PathBringerService pathBringer;
     private final ZipReaderService zipReaderService;
-    private final MarkParser markParser;
-    private final ReportsCreator reportsCreator;
-
-
+    private final ReportProcessingService processingService;
 
     @Autowired
-    public CsvMergerController(PathBringerService pathBringer,
+    public CsvMergerController(ApplicationContext context,
+                               PathBringerService pathBringer,
                                ZipReaderService zipReaderService,
-                               ApplicationContext context,
-                               MarkParser markParser, ReportsCreator reportsCreator) {
+                               ReportProcessingService processingService) {
+        this.context = context;
         this.pathBringer = pathBringer;
         this.zipReaderService = zipReaderService;
-        this.context = context;
-        this.markParser = markParser;
-        this.reportsCreator = reportsCreator;
+        this.processingService = processingService;
     }
+
 
     @EventListener(ApplicationReadyEvent.class)
     public void runMergeCSV() {
 
+        while (true) {
+            System.out.println("\n****" +
+                              "\nEnter path to zip source in format like \"D:\\folder\\target.zip\"" +
+                              "\nTo escape - enter \"exit\"");
 
-//        READY PART
-//        while (true) {
-//              System.out.println("\n****" +
-//                              "\nEnter path to target zip source. " +
-//                              "\nTo escape - enter \"exit\"");
+            String pathToZip = pathBringer.getPath();
+//            String pathToZip = "D:\\1\\source_archive.zip";
+            if (pathToZip.equals("exit")) {
+                break;
+            }
 
-//            String path = pathBringer.getPath();
-//            if (path.equals("exit")) {
-//                break;
-//            }
+            System.out.println("Enter path to target folder " +
+                    "for reports in format like \"D:\\target_folder\\\"");
 
-//
-//            System.out.println(path);
-//        }
-//
-//        shutdownContext();
+            String pathToReport = pathBringer.getPath();
+//            String pathToReport = "D:\\";
 
-        String pathToZip = "D:\\1\\source_archive.zip";
-        List<String> strings = zipReaderService.readStringsFrom(pathToZip);
+            System.out.println("\n****\nStart new session\n\nInput Data:\n");
+            List<String> strings = zipReaderService.readStringsFrom(pathToZip);
+            strings.forEach(System.out::println);
 
-        System.out.println("\n****\nStart new session\n\nInput Data:\n");
-        strings.forEach(System.out::println);
-
-        List<Mark> availableMarks = markParser.createStreamOfMarksFrom(strings)
-                                        .collect(Collectors.toList());
-
-        List<String> markNames = List.of("mark01", "mark11", "mark13", "markft");
-
-
-        // TODO потом считать с консоли
-        reportsCreator.setPathToReport("D:\\");
-
-        reportsCreator.createReportSummarize(availableMarks);
-        reportsCreator.createReportInputMarks(availableMarks, markNames);
-        reportsCreator.createReportListQuantity(availableMarks);
+            processingService.runReportProcessing(strings, pathToReport);
+            System.out.println("\nSession close.\n****");
+        }
 
         shutdownContext();
 
-        // TODO потом прибрать проект
         // TODO сделать тесты
     }
-
 
     private void shutdownContext() {
         ((ConfigurableApplicationContext) context).close();
